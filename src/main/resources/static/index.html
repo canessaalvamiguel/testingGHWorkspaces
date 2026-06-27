@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestión de Personas</title>
+  <title>Canessadev — Gestión de Personas</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -12,16 +12,107 @@
       background: #f1f5f9;
       color: #1e293b;
       min-height: 100vh;
-      padding: 2rem 1rem;
     }
 
-    .container { max-width: 900px; margin: 0 auto; }
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #0f2d6b 0%, #1a4db8 60%, #2563eb 100%);
+      box-shadow: 0 2px 16px rgba(15,45,107,.35);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-    h1 {
-      font-size: 1.75rem;
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: .9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      background: rgba(255,255,255,.15);
+      border: 1.5px solid rgba(255,255,255,.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .brand-icon svg { width: 20px; height: 20px; fill: #fff; }
+
+    .brand-text { display: flex; flex-direction: column; line-height: 1; }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+    }
+
+    .brand-name span { color: #93c5fd; }
+
+    .brand-tagline {
+      font-size: .68rem;
+      color: rgba(255,255,255,.6);
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .header-badge {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      color: rgba(255,255,255,.85);
+      font-size: .72rem;
+      font-weight: 600;
+      padding: .3rem .75rem;
+      border-radius: 999px;
+      letter-spacing: .04em;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ── HERO STRIP ── */
+    .hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .hero-inner { max-width: 1100px; margin: 0 auto; }
+
+    .hero h1 {
+      font-size: 1.6rem;
       font-weight: 700;
-      margin-bottom: 1.5rem;
-      color: #0f172a;
+      color: #fff;
+      margin-bottom: .4rem;
+    }
+
+    .hero p {
+      color: rgba(255,255,255,.65);
+      font-size: .92rem;
+    }
+
+    /* ── CONTENT ── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
     }
 
     /* Card */
@@ -49,7 +140,11 @@
       gap: .75rem;
     }
 
-    @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .header-badge { display: none; }
+      .hero h1 { font-size: 1.3rem; }
+    }
 
     .field { display: flex; flex-direction: column; gap: .3rem; }
     .field label { font-size: .8rem; font-weight: 600; color: #64748b; }
@@ -62,7 +157,7 @@
       transition: border-color .15s;
       outline: none;
     }
-    input:focus { border-color: #6366f1; }
+    input:focus { border-color: #2563eb; }
     input.error { border-color: #ef4444; }
 
     .field-error { font-size: .75rem; color: #ef4444; display: none; }
@@ -83,12 +178,10 @@
     .btn:active { transform: scale(.97); }
     .btn:disabled { opacity: .5; cursor: not-allowed; }
 
-    .btn-primary  { background: #6366f1; color: #fff; }
-    .btn-primary:hover:not(:disabled)  { background: #4f46e5; }
+    .btn-primary  { background: #1d4ed8; color: #fff; }
+    .btn-primary:hover:not(:disabled)  { background: #1e40af; }
     .btn-secondary { background: #e2e8f0; color: #475569; }
     .btn-secondary:hover:not(:disabled) { background: #cbd5e1; }
-    .btn-danger   { background: #ef4444; color: #fff; }
-    .btn-danger:hover:not(:disabled)   { background: #dc2626; }
     .btn-edit     { background: #f59e0b; color: #fff; padding: .35rem .75rem; font-size: .8rem; }
     .btn-edit:hover:not(:disabled)     { background: #d97706; }
     .btn-del      { background: #ef4444; color: #fff; padding: .35rem .75rem; font-size: .8rem; }
@@ -135,7 +228,6 @@
 
     .actions-cell { display: flex; gap: .4rem; }
 
-    /* Empty / loading states */
     .state-row td {
       text-align: center;
       padding: 2.5rem;
@@ -149,14 +241,52 @@
       border-radius: 999px;
       font-size: .75rem;
       font-weight: 600;
-      background: #e0e7ff;
-      color: #4f46e5;
+      background: #dbeafe;
+      color: #1d4ed8;
     }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .78rem;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      background: #fff;
+    }
+    footer span { color: #1d4ed8; font-weight: 600; }
   </style>
 </head>
 <body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-inner">
+    <a class="brand" href="/">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Canessa<span>dev</span></span>
+        <span class="brand-tagline">Platform · v1.0</span>
+      </div>
+    </a>
+    <span class="header-badge">Spring Boot · REST API</span>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-inner">
+    <h1>Gestión de Personas</h1>
+    <p>Administra el registro de personas desde un solo lugar</p>
+  </div>
+</div>
+
+<!-- ── CONTENT ── -->
 <div class="container">
-  <h1>Gestión de Personas</h1>
 
   <!-- Form Card -->
   <div class="card">
@@ -215,22 +345,27 @@
   </div>
 </div>
 
+<!-- ── FOOTER ── -->
+<footer>
+  &copy; 2026 <span>Canessadev</span> · Todos los derechos reservados
+</footer>
+
 <div id="toast"></div>
 
 <script>
   const API = '/api/personas';
 
-  const form       = document.getElementById('person-form');
-  const editIdInput= document.getElementById('edit-id');
-  const nombreInput= document.getElementById('nombre');
-  const apellidoInput= document.getElementById('apellido');
-  const edadInput  = document.getElementById('edad');
-  const emailInput = document.getElementById('email');
-  const submitBtn  = document.getElementById('submit-btn');
-  const cancelBtn  = document.getElementById('cancel-btn');
-  const formTitle  = document.getElementById('form-title');
-  const tableBody  = document.getElementById('table-body');
-  const toast      = document.getElementById('toast');
+  const form        = document.getElementById('person-form');
+  const editIdInput = document.getElementById('edit-id');
+  const nombreInput = document.getElementById('nombre');
+  const apellidoInput = document.getElementById('apellido');
+  const edadInput   = document.getElementById('edad');
+  const emailInput  = document.getElementById('email');
+  const submitBtn   = document.getElementById('submit-btn');
+  const cancelBtn   = document.getElementById('cancel-btn');
+  const formTitle   = document.getElementById('form-title');
+  const tableBody   = document.getElementById('table-body');
+  const toast       = document.getElementById('toast');
 
   let toastTimer;
 
@@ -311,19 +446,19 @@
     e.preventDefault();
     clearErrors();
 
-    const id     = editIdInput.value;
-    const nombre = nombreInput.value.trim();
+    const id       = editIdInput.value;
+    const nombre   = nombreInput.value.trim();
     const apellido = apellidoInput.value.trim();
-    const edad   = edadInput.value;
-    const email  = emailInput.value.trim();
+    const edad     = edadInput.value;
+    const email    = emailInput.value.trim();
 
-    const body = { nombre, apellido, edad: edad !== '' ? Number(edad) : null, email };
+    const body   = { nombre, apellido, edad: edad !== '' ? Number(edad) : null, email };
     const url    = id ? `${API}/${id}` : API;
     const method = id ? 'PUT' : 'POST';
 
     submitBtn.disabled = true;
     try {
-      const res  = await fetch(url, {
+      const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
@@ -352,11 +487,11 @@
     try {
       const res    = await fetch(`${API}/${id}`);
       const person = await res.json();
-      editIdInput.value  = person.id;
-      nombreInput.value  = person.nombre;
-      apellidoInput.value= person.apellido;
-      edadInput.value    = person.edad;
-      emailInput.value   = person.email;
+      editIdInput.value   = person.id;
+      nombreInput.value   = person.nombre;
+      apellidoInput.value = person.apellido;
+      edadInput.value     = person.edad;
+      emailInput.value    = person.email;
       formTitle.textContent = 'Editar Persona';
       submitBtn.textContent = 'Actualizar';
       cancelBtn.style.display = 'inline-block';
